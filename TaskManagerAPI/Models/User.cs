@@ -1,4 +1,6 @@
-﻿namespace TaskManagerAPI.Models
+﻿using System.Collections.Generic;
+
+namespace TaskManagerAPI.Models
 {
     public class User
     {
@@ -7,5 +9,8 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
+
+        public  Address? Address { get; set; }
+        public List<TaskItem>? Tasks { get; set; }  //Navigations Reference
     }
 }

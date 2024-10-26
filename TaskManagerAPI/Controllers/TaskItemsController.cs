@@ -25,7 +25,10 @@ namespace TaskManagerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         {
-            return await _context.Tasks.ToListAsync();
+            var data= await _context.Tasks.ToListAsync();
+
+
+            return data;
         }
 
         // GET: api/TaskItems/5

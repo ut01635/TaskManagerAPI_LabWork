@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TaskManagerAPI.Models
 {
@@ -12,5 +13,9 @@ namespace TaskManagerAPI.Models
         public DateTime DueDate { get; set; }
         [Required]
         public string Priority { get; set; }
+        public int UserId { get; set; }
+
+        public User? User { get; set; }
+
     }
 }
