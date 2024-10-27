@@ -24,7 +24,7 @@ namespace TaskManagerAPI.Data
             modelBuilder.Entity<User>()
                 .HasMany(t => t.Tasks)
                 .WithOne(u => u.User)
-                .HasForeignKey(t => t.UserId);
+                .HasForeignKey(t => t.AssigneeId);
                 
             base.OnModelCreating(modelBuilder);
         }
