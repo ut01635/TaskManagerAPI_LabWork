@@ -23,9 +23,14 @@ namespace TaskManagerAPI.Data
             //ONE to Many
             modelBuilder.Entity<User>()
                 .HasMany(t => t.Tasks)
-                .WithOne(u => u.User)
+                .WithOne(u => u.Assignee)
                 .HasForeignKey(t => t.AssigneeId);
-                
+
+            modelBuilder.Entity<TaskItem>()
+               .HasMany(t => t.CheckLists)
+               .WithOne(c => c.Task)
+               .HasForeignKey(c => c.TaskId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

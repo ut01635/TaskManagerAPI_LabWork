@@ -25,7 +25,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         {
-            var data= await _context.Tasks.Include(u =>u.User).ToListAsync();
+            var data= await _context.Tasks.Include(u =>u.Assignee).ToListAsync();
 
 
             return data;
@@ -35,7 +35,7 @@ namespace TaskManagerAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskItem>> GetTaskItem(int id)
         {
-            var taskItem = await _context.Tasks.Include(u => u.User).FirstOrDefaultAsync(taskItem => taskItem.Id == id);
+            var taskItem = await _context.Tasks.Include(u => u.Assignee).FirstOrDefaultAsync(taskItem => taskItem.Id == id);
 
             if (taskItem == null)
             {
