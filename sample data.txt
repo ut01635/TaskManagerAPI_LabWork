@@ -1,0 +1,25 @@
+{
+  "name": "Imthath",
+  "email": "imthath@gmail.com",
+  "password": "123456",
+  "phone": "0771213456",
+  "address": {
+    "addressLine1": "nilaveli",
+    "addressLine2": "kuchchaveli",
+    "city": "Trinco"
+  },
+  "tasks": [
+    {   
+      "title": "Task 01",
+      "description": "task 01 description",
+      "dueDate": "2024-11-01T17:22:30.869Z",
+      "priority": "Low",
+      "checkLists": [
+        {
+          "name": "Check 01",
+          "isDone": true
+        }
+      ]
+    }
+  ]
+}
