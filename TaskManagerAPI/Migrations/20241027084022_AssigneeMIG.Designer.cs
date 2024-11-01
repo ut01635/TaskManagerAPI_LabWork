@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagerAPI.Data;
 
@@ -11,9 +12,11 @@ using TaskManagerAPI.Data;
 namespace TaskManagerAPI.Migrations
 {
     [DbContext(typeof(TaskContext))]
-    partial class TaskContextModelSnapshot : ModelSnapshot
+    [Migration("20241027084022_AssigneeMIG")]
+    partial class AssigneeMIG
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,31 +56,6 @@ namespace TaskManagerAPI.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("TaskManagerAPI.Models.CheckList", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("CheckList");
-                });
-
             modelBuilder.Entity("TaskManagerAPI.Models.TaskItem", b =>
                 {
                     b.Property<int>("Id")
@@ -86,7 +64,7 @@ namespace TaskManagerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AssigneeId")
+                    b.Property<int>("AssigneeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -120,6 +98,7 @@ namespace TaskManagerAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -127,9 +106,11 @@ namespace TaskManagerAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -148,29 +129,15 @@ namespace TaskManagerAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskManagerAPI.Models.CheckList", b =>
+            modelBuilder.Entity("TaskManagerAPI.Models.TaskItem", b =>
                 {
-                    b.HasOne("TaskManagerAPI.Models.TaskItem", "Task")
-                        .WithMany("CheckLists")
-                        .HasForeignKey("TaskId")
+                    b.HasOne("TaskManagerAPI.Models.User", "User")
+                        .WithMany("Tasks")
+                        .HasForeignKey("AssigneeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("TaskManagerAPI.Models.TaskItem", b =>
-                {
-                    b.HasOne("TaskManagerAPI.Models.User", "Assignee")
-                        .WithMany("Tasks")
-                        .HasForeignKey("AssigneeId");
-
-                    b.Navigation("Assignee");
-                });
-
-            modelBuilder.Entity("TaskManagerAPI.Models.TaskItem", b =>
-                {
-                    b.Navigation("CheckLists");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskManagerAPI.Models.User", b =>

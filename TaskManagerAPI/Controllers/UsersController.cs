@@ -12,50 +12,48 @@ namespace TaskManagerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskItemsController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly TaskContext _context;
 
-        public TaskItemsController(TaskContext context)
+        public UsersController(TaskContext context)
         {
             _context = context;
         }
 
-        // GET: api/TaskItems
+        // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var data= await _context.Tasks.Include(u =>u.Assignee).ToListAsync();
-
-
-            return data;
+            return await _context.Users.Include(a=> a.Address).Include(t=>t.Tasks).ToListAsync();
         }
 
-        // GET: api/TaskItems/5
+        // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskItem>> GetTaskItem(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            var taskItem = await _context.Tasks.Include(u => u.Assignee).FirstOrDefaultAsync(taskItem => taskItem.Id == id);
+            var user = await _context.Users.Include(a=> a.Address).Include(t=> t.Tasks).SingleOrDefaultAsync(u => u.Id == id);
 
-            if (taskItem == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return taskItem;
+            return user;
         }
 
-        // PUT: api/TaskItems/5
+        // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskItem(int id, TaskItem taskItem)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != taskItem.Id)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(taskItem).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry<Address>(user.Address).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +61,7 @@ namespace TaskManagerAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TaskItemExists(id))
+                if (!UserExists(id))
                 {
                     return NotFound();
                 }
@@ -76,36 +74,36 @@ namespace TaskManagerAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/TaskItems
+        // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TaskItem>> PostTaskItem(TaskItem taskItem)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.Tasks.Add(taskItem);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTaskItem", new { id = taskItem.Id }, taskItem);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/TaskItems/5
+        // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTaskItem(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var taskItem = await _context.Tasks.FindAsync(id);
-            if (taskItem == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(taskItem);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TaskItemExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Tasks.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
