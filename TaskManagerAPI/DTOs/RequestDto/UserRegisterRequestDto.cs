@@ -8,6 +8,7 @@ namespace TaskManagerAPI.DTOs.RequestDto
         [Required(ErrorMessage = "UserName is required.")]
         public string FullName { get; set; }
 
+        [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
