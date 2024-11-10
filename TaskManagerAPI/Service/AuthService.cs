@@ -32,14 +32,14 @@ namespace TaskManagerAPI.Service
             return token;
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string> Login(LoginRequestDto loginRequest)
         {
-            var user = await _authRepository.GetUserByEmail(email);
+            var user = await _authRepository.GetUserByEmail(loginRequest.Email);
             if (user == null)
             {
                 throw new Exception("User not found.");
             }
-            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
             {
                 throw new Exception("Wrong password.");
             }
@@ -49,11 +49,14 @@ namespace TaskManagerAPI.Service
 
         private string CreateToken(UserLogin user)
         {
-            var claimsList = new List<Claim>();
-            claimsList.Add(new Claim("Id", user.UserId.ToString()));
-            claimsList.Add(new Claim("Name", user.FullName));
-            claimsList.Add(new Claim("Email", user.Email));
-            claimsList.Add(new Claim("Role", user.Role.ToString()));
+                   var claimsList = new List<Claim>
+                    {
+                       new Claim("Id", user.UserId.ToString()),
+                       new Claim("Name", user.FullName),
+                       new Claim("Email", user.Email),
+                       new Claim("Role", user.Role.ToString())
+                    };
+
 
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));

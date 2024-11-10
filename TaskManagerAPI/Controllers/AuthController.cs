@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerAPI.DTOs.RequestDto;
+using TaskManagerAPI.DTOs.ResponseDto;
 using TaskManagerAPI.IService;
 
 namespace TaskManagerAPI.Controllers
@@ -17,7 +18,7 @@ namespace TaskManagerAPI.Controllers
             _authService = authService;
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegisterRequestDto user)
         {
             try
@@ -30,13 +31,17 @@ namespace TaskManagerAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> Login(string email, string password)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginRequestDto loginRequest)
         {
             try
             {
-                var result = await _authService.Login(email, password);
-                return Ok(result);
+                var result = await _authService.Login(loginRequest);
+
+                var a = new TokenResponseModel();
+                a.Token = result;
+
+                return Ok(a);
             }
             catch (Exception ex)
             {
